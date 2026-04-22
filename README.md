@@ -1,4 +1,4 @@
-# ShopFlow v2 — Microservice E-Commerce Platform
+# ShopFlow — Microservice E-Commerce Platform
 
 > **Full-stack microservice project** built with Spring Boot 3, React, Kafka, Docker, and JWT authentication.  
 > Deployed live on free platforms: Render.com + Netlify + RedpandaCloud
@@ -56,6 +56,8 @@ ShopFlow is a **microservice-based e-commerce backend** with a React frontend. I
 ---
 
 ## 3. Architecture
+
+> 📊 [Interactive Architecture Diagram](link-to-deployed-diagram)
 
 ### High-Level Flow
 
