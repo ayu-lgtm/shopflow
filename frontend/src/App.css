@@ -1,0 +1,275 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #f5f7fa;
+  color: #1a1a2e;
+  line-height: 1.6;
+}
+
+/* ── Navbar ──────────────────────────────── */
+.navbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 2rem; height: 60px;
+  background: #1a1a2e; color: white;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+.nav-brand { color: white; text-decoration: none; font-size: 1.3rem; font-weight: 700; }
+.nav-links { display: flex; align-items: center; gap: 1.2rem; }
+.nav-links a { color: #ccc; text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover { color: white; }
+.nav-user { color: #7ec8e3; font-size: 0.9rem; }
+.btn-link { background: none; border: none; color: #f87171; cursor: pointer; font-size: 0.9rem; }
+
+/* ── Container ──────────────────────────── */
+.container { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+/* ── Buttons ─────────────────────────────── */
+.btn-primary {
+  background: #6366f1; color: white; border: none;
+  padding: 0.6rem 1.4rem; border-radius: 8px; cursor: pointer;
+  font-size: 0.95rem; font-weight: 600; transition: background 0.2s;
+  text-decoration: none; display: inline-block;
+}
+.btn-primary:hover { background: #4f46e5; }
+.btn-primary:disabled { background: #a5b4fc; cursor: not-allowed; }
+.btn-primary.full-width { width: 100%; padding: 0.75rem; }
+.btn-outline {
+  background: transparent; color: #6366f1; border: 2px solid #6366f1;
+  padding: 0.6rem 1.4rem; border-radius: 8px; cursor: pointer;
+  font-size: 0.95rem; font-weight: 600; text-decoration: none;
+  display: inline-block; transition: all 0.2s;
+}
+.btn-outline:hover { background: #6366f1; color: white; }
+.btn-primary-sm {
+  background: #6366f1; color: white; padding: 0.3rem 0.8rem;
+  border-radius: 6px; text-decoration: none; font-size: 0.85rem;
+}
+.btn-danger-sm {
+  background: #ef4444; color: white; border: none;
+  padding: 0.3rem 0.7rem; border-radius: 6px; cursor: pointer; font-size: 0.82rem;
+}
+.btn-danger-sm:hover { background: #dc2626; }
+
+/* ── Alerts ──────────────────────────────── */
+.alert-error {
+  background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5;
+  padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.9rem;
+}
+.alert-success {
+  background: #dcfce7; color: #15803d; border: 1px solid #86efac;
+  padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.9rem;
+}
+.info-text {
+  background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe;
+  padding: 0.6rem 1rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.85rem;
+}
+
+/* ── Forms ───────────────────────────────── */
+.form-group { margin-bottom: 1rem; }
+.form-group label { display: block; margin-bottom: 0.3rem; font-weight: 500; font-size: 0.9rem; }
+.form-group input, .form-group select {
+  width: 100%; padding: 0.6rem 0.9rem; border: 1.5px solid #d1d5db;
+  border-radius: 8px; font-size: 0.95rem; transition: border-color 0.2s;
+}
+.form-group input:focus { outline: none; border-color: #6366f1; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+/* ── Home Page ───────────────────────────── */
+.home-page { padding: 1rem 0; }
+.hero {
+  text-align: center; padding: 3rem 1rem 2.5rem;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-radius: 16px; color: white; margin-bottom: 2.5rem;
+}
+.hero h1 { font-size: 2.2rem; margin-bottom: 0.8rem; }
+.hero p { color: #a5b4fc; margin-bottom: 1.8rem; font-size: 1.05rem; }
+.hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+.tech-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.2rem; }
+.tech-card {
+  background: white; padding: 1.5rem; border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06); border: 1px solid #e5e7eb;
+}
+.tech-icon { font-size: 2rem; }
+.tech-card h3 { margin: 0.5rem 0 0.3rem; color: #1a1a2e; }
+.tech-card p { color: #6b7280; font-size: 0.88rem; }
+
+/* ── Auth Pages ──────────────────────────── */
+.auth-page { display: flex; justify-content: center; padding: 2rem 1rem; }
+.auth-card {
+  background: white; padding: 2rem; border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08); width: 100%; max-width: 420px;
+}
+.auth-card h2 { margin-bottom: 1.5rem; color: #1a1a2e; }
+.auth-link { text-align: center; margin-top: 1.2rem; color: #6b7280; font-size: 0.9rem; }
+.auth-link a { color: #6366f1; text-decoration: none; font-weight: 500; }
+
+/* ── Products Page ───────────────────────── */
+.products-page { padding: 0.5rem 0; }
+.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem; }
+.search-input {
+  padding: 0.5rem 1rem; border: 1.5px solid #d1d5db; border-radius: 8px;
+  font-size: 0.95rem; width: 240px;
+}
+.products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1.2rem; }
+.product-card {
+  background: white; padding: 1.3rem; border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06); border: 1px solid #e5e7eb;
+  display: flex; flex-direction: column; gap: 0.5rem;
+}
+.product-category {
+  font-size: 0.75rem; color: #6366f1; background: #eff6ff;
+  padding: 0.2rem 0.6rem; border-radius: 20px; display: inline-block; font-weight: 600;
+}
+.product-card h3 { color: #1a1a2e; font-size: 1rem; }
+.product-card p { color: #6b7280; font-size: 0.85rem; flex: 1; }
+.product-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem; }
+.product-price { font-size: 1.1rem; font-weight: 700; color: #059669; }
+.stock-badge { font-size: 0.75rem; padding: 0.2rem 0.6rem; border-radius: 20px; font-weight: 600; }
+.in-stock { background: #dcfce7; color: #15803d; }
+.out-stock { background: #fee2e2; color: #b91c1c; }
+
+/* ── Dashboard ───────────────────────────── */
+.dashboard-page { padding: 0.5rem 0; }
+.dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+.dashboard-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2rem; }
+.stat-card {
+  background: white; padding: 1.3rem; border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06); text-align: center;
+  display: flex; flex-direction: column; gap: 0.3rem;
+}
+.stat-num { font-size: 1.8rem; font-weight: 700; color: #6366f1; }
+.stat-label { font-size: 0.85rem; color: #6b7280; }
+.form-card {
+  background: white; padding: 1.5rem; border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 1.5rem; border: 1px solid #e5e7eb;
+}
+.form-card h3 { margin-bottom: 1rem; }
+.products-table-wrap { overflow-x: auto; }
+.products-table {
+  width: 100%; border-collapse: collapse; background: white;
+  border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.products-table th {
+  background: #1a1a2e; color: white; padding: 0.75rem 1rem;
+  text-align: left; font-size: 0.85rem; font-weight: 600;
+}
+.products-table td { padding: 0.75rem 1rem; border-bottom: 1px solid #f3f4f6; font-size: 0.9rem; }
+.products-table tr:last-child td { border-bottom: none; }
+.products-table tr:hover td { background: #f9fafb; }
+.products-table small { color: #9ca3af; }
+
+/* ── Misc ────────────────────────────────── */
+.loading { text-align: center; padding: 3rem; color: #6b7280; font-size: 1.1rem; }
+.empty-state { text-align: center; padding: 3rem; color: #9ca3af; }
+
+/* ── Role Badges ──────────────────────────────────────────────────── */
+.role-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin-left: 8px;
+  text-transform: uppercase;
+}
+.role-badge--admin {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #f59e0b;
+}
+.role-badge--user {
+  background: #dbeafe;
+  color: #1e40af;
+  border: 1px solid #60a5fa;
+}
+
+/* ── Navbar admin badge ────────────────────────────────────────────── */
+.nav-admin-badge {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #f59e0b;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+.nav-admin-badge:hover { background: #fde68a; }
+
+/* ── Info / warning banners ────────────────────────────────────────── */
+.alert-info {
+  background: #eff6ff;
+  color: #1e40af;
+  border: 1px solid #93c5fd;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+}
+
+/* ── Header actions row ────────────────────────────────────────────── */
+.header-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.btn-secondary {
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+.btn-secondary:hover { background: #e5e7eb; }
+
+/* ── Admin info box ────────────────────────────────────────────────── */
+.admin-info-box {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 20px 24px;
+  margin-top: 32px;
+}
+.admin-info-box h4 { margin: 0 0 12px; color: #374151; }
+.admin-info-box ol { margin: 0; padding-left: 20px; color: #6b7280; }
+.admin-info-box li { margin-bottom: 6px; line-height: 1.5; }
+.admin-info-box code {
+  background: #e5e7eb;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 0.82rem;
+  color: #374151;
+}
+
+/* ── Demo hint on login page ───────────────────────────────────────── */
+.demo-hint {
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.demo-hint p { margin: 0; font-size: 0.85rem; color: #166534; }
+.btn-demo {
+  background: #22c55e;
+  color: white;
+  border: none;
+  padding: 5px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+.btn-demo:hover { background: #16a34a; }
+.demo-or { font-size: 0.8rem; color: #6b7280; }
