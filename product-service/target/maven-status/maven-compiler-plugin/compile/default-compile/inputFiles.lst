@@ -1,0 +1,11 @@
+/Users/ayushrastogi/Downloads/shopflow_fixed/product-service/src/main/java/com/shopflow/product/config/UserServiceFallback.java
+/Users/ayushrastogi/Downloads/shopflow_fixed/product-service/src/main/java/com/shopflow/product/config/UserServiceClient.java
+/Users/ayushrastogi/Downloads/shopflow_fixed/product-service/src/main/java/com/shopflow/product/kafka/UserEventConsumer.java
+/Users/ayushrastogi/Downloads/shopflow_fixed/product-service/src/main/java/com/shopflow/product/service/ProductService.java
+/Users/ayushrastogi/Downloads/shopflow_fixed/product-service/src/main/java/com/shopflow/product/config/DataInitializer.java
+/Users/ayushrastogi/Downloads/shopflow_fixed/product-service/src/main/java/com/shopflow/product/dto/ProductDto.java
+/Users/ayushrastogi/Downloads/shopflow_fixed/product-service/src/main/java/com/shopflow/product/config/SecurityConfig.java
+/Users/ayushrastogi/Downloads/shopflow_fixed/product-service/src/main/java/com/shopflow/product/repository/ProductRepository.java
+/Users/ayushrastogi/Downloads/shopflow_fixed/product-service/src/main/java/com/shopflow/product/controller/ProductController.java
+/Users/ayushrastogi/Downloads/shopflow_fixed/product-service/src/main/java/com/shopflow/product/ProductServiceApplication.java
+/Users/ayushrastogi/Downloads/shopflow_fixed/product-service/src/main/java/com/shopflow/product/model/Product.java

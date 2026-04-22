@@ -1,0 +1,114 @@
+version: '3.8'
+
+services:
+
+  # ── Zookeeper (Kafka ke liye zaroori) ─────────────────────────────────────
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    container_name: shopflow-zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks: [shopflow-net]
+
+  # ── Kafka (Async messaging) ────────────────────────────────────────────────
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: shopflow-kafka
+    depends_on: [zookeeper]
+    ports: ["9092:9092"]
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    networks: [shopflow-net]
+
+  # ── Eureka Server ──────────────────────────────────────────────────────────
+  eureka-server:
+    build: ./eureka-server
+    container_name: shopflow-eureka
+    ports: ["8761:8761"]
+    networks: [shopflow-net]
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8761/actuator/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+  # ── User Service ───────────────────────────────────────────────────────────
+  user-service:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    container_name: shopflow-user
+    ports: ["8081:8081"]
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+    environment:
+      EUREKA_URL: http://eureka-server:8761/eureka/
+      KAFKA_URL: kafka:29092
+      DB_URL: jdbc:h2:mem:userdb
+      DB_USER: sa
+      DB_PASS: ""
+      DB_DRIVER: org.h2.Driver
+      HIBERNATE_DIALECT: org.hibernate.dialect.H2Dialect
+      JWT_SECRET: shopflow-super-secret-key-must-be-256-bits-long!
+    networks: [shopflow-net]
+
+  # ── Product Service ────────────────────────────────────────────────────────
+  product-service:
+    build:
+      context: ./product-service
+      dockerfile: Dockerfile
+    container_name: shopflow-product
+    ports: ["8082:8082"]
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+    environment:
+      EUREKA_URL: http://eureka-server:8761/eureka/
+      KAFKA_URL: kafka:29092
+      DB_URL: jdbc:h2:mem:productdb
+      DB_USER: sa
+      DB_PASS: ""
+      DB_DRIVER: org.h2.Driver
+      HIBERNATE_DIALECT: org.hibernate.dialect.H2Dialect
+    networks: [shopflow-net]
+
+  # ── API Gateway ────────────────────────────────────────────────────────────
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    container_name: shopflow-gateway
+    ports: ["8080:8080"]
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+    environment:
+      EUREKA_URL: http://eureka-server:8761/eureka/
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: https://dev-43odit3gbhzp7qsk.us.auth0.com/
+    networks: [shopflow-net]
+
+  # ── React Frontend ─────────────────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: shopflow-frontend
+    ports: ["3000:80"]
+    depends_on: [api-gateway]
+    networks: [shopflow-net]
+
+networks:
+  shopflow-net:
+    driver: bridge

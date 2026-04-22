@@ -1,0 +1,44 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+
+  # ❌ HATAO: oauth2.resourceserver.jwt.issuer-uri (Auth0 wala)
+  # ✅ Sirf jwt.secret enough hai — SecurityConfig.java isse read karega
+
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+
+      routes:
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/users/**
+
+        - id: product-service
+          uri: lb://product-service
+          predicates:
+            - Path=/api/products/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka/}
+  instance:
+    prefer-ip-address: true
+
+# Same secret jo user-service use karta hai
+jwt:
+  secret: ${JWT_SECRET:shopflow-super-secret-key-must-be-256-bits-long!}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

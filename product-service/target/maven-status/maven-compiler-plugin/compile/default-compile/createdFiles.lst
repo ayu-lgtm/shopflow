@@ -1,0 +1,14 @@
+com/shopflow/product/config/UserServiceFallback.class
+com/shopflow/product/controller/ProductController.class
+com/shopflow/product/dto/ProductDto$ProductResponse.class
+com/shopflow/product/service/ProductService.class
+com/shopflow/product/model/Product.class
+com/shopflow/product/model/Product$ProductBuilder.class
+com/shopflow/product/repository/ProductRepository.class
+com/shopflow/product/dto/ProductDto$CreateRequest.class
+com/shopflow/product/dto/ProductDto.class
+com/shopflow/product/config/UserServiceClient.class
+com/shopflow/product/ProductServiceApplication.class
+com/shopflow/product/config/SecurityConfig.class
+com/shopflow/product/kafka/UserEventConsumer.class
+com/shopflow/product/config/DataInitializer.class

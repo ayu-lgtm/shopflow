@@ -1,0 +1,687 @@
+{
+  "info": {
+    "name": "ShopFlow v2 — JWT Auth (Complete Test Suite)",
+    "description": "Complete JWT auth test suite for User + Admin roles. \n\n**Setup:** Set baseUrl variable to http://localhost:8080\n\n**Flow:**\n1. Run 'Admin Login' → auto-saves token\n2. Run 'User Register' → auto-saves user token\n3. Test all endpoints",
+    "_postman_id": "shopflow-jwt-v2",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl",    "value": "http://localhost:8080", "type": "string" },
+    { "key": "adminToken", "value": "",                      "type": "string" },
+    { "key": "userToken",  "value": "",                      "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "1. Auth — Public",
+      "item": [
+        {
+          "name": "Admin Login ✅",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has token', () => pm.expect(pm.response.json().token).to.be.a('string'));",
+                  "pm.test('Role is ADMIN', () => pm.expect(pm.response.json().role).to.eql('ADMIN'));",
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set('adminToken', json.token);",
+                  "console.log('Admin token saved:', json.token.substring(0,30) + '...');"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@shopflow.com\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/users/login", "host": ["{{baseUrl}}"], "path": ["api","users","login"] }
+          }
+        },
+        {
+          "name": "User Register ✅",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "pm.test('Has token', () => pm.expect(pm.response.json().token).to.be.a('string'));",
+                  "pm.test('Role is USER', () => pm.expect(pm.response.json().role).to.eql('USER'));",
+                  "pm.collectionVariables.set('userToken', pm.response.json().token);",
+                  "console.log('User token saved');"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"testuser@shopflow.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/users/register", "host": ["{{baseUrl}}"], "path": ["api","users","register"] }
+          }
+        },
+        {
+          "name": "User Login ✅",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has token', () => pm.expect(pm.response.json().token).to.be.a('string'));",
+                  "pm.collectionVariables.set('userToken', pm.response.json().token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"testuser@shopflow.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/users/login", "host": ["{{baseUrl}}"], "path": ["api","users","login"] }
+          }
+        },
+        {
+          "name": "Login — Wrong Password ❌ (expect 400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 400 for wrong password', () => pm.response.to.have.status(400));",
+                  "pm.test('Error message present', () => pm.expect(pm.response.json().error).to.be.a('string'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@shopflow.com\",\n  \"password\": \"wrongpassword\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/users/login", "host": ["{{baseUrl}}"], "path": ["api","users","login"] }
+          }
+        },
+        {
+          "name": "Login — User Not Found ❌ (expect 400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 400 for unknown user', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"nobody@example.com\",\n  \"password\": \"pass\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/users/login", "host": ["{{baseUrl}}"], "path": ["api","users","login"] }
+          }
+        },
+        {
+          "name": "Register — Duplicate Email ❌ (expect 400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 400 for duplicate email', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Duplicate\",\n  \"email\": \"admin@shopflow.com\",\n  \"password\": \"somepass\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/users/register", "host": ["{{baseUrl}}"], "path": ["api","users","register"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Users — Protected",
+      "item": [
+        {
+          "name": "GET /api/users/all — Admin ✅",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Returns array', () => pm.expect(pm.response.json()).to.be.an('array'));",
+                  "pm.test('Contains admin user', () => {",
+                  "  const users = pm.response.json();",
+                  "  const adminUser = users.find(u => u.email === 'admin@shopflow.com');",
+                  "  pm.expect(adminUser).to.not.be.undefined;",
+                  "  pm.expect(adminUser.role).to.eql('ADMIN');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/users/all", "host": ["{{baseUrl}}"], "path": ["api","users","all"] }
+          }
+        },
+        {
+          "name": "GET /api/users/all — User Token ❌ (expect 403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 403 for non-admin', () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{userToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/users/all", "host": ["{{baseUrl}}"], "path": ["api","users","all"] }
+          }
+        },
+        {
+          "name": "GET /api/users/all — No Token ❌ (expect 401)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 401 for no token', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/users/all", "host": ["{{baseUrl}}"], "path": ["api","users","all"] }
+          }
+        },
+        {
+          "name": "GET /api/users/profile — Admin ✅",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Returns admin email', () => pm.expect(pm.response.json().email).to.eql('admin@shopflow.com'));",
+                  "pm.test('Role is ADMIN', () => pm.expect(pm.response.json().role).to.eql('ADMIN'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/users/profile", "host": ["{{baseUrl}}"], "path": ["api","users","profile"] }
+          }
+        },
+        {
+          "name": "GET /api/users/profile — User ✅",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Role is USER', () => pm.expect(pm.response.json().role).to.eql('USER'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{userToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/users/profile", "host": ["{{baseUrl}}"], "path": ["api","users","profile"] }
+          }
+        },
+        {
+          "name": "GET /api/users/profile — No Token ❌ (expect 401)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 401 for no token', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/users/profile", "host": ["{{baseUrl}}"], "path": ["api","users","profile"] }
+          }
+        },
+        {
+          "name": "GET /api/users/validate — Public ✅",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Returns exists=true for admin', () => pm.expect(pm.response.json().exists).to.be.true);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/users/validate?email=admin@shopflow.com",
+              "host": ["{{baseUrl}}"],
+              "path": ["api","users","validate"],
+              "query": [{ "key": "email", "value": "admin@shopflow.com" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Products — Public GET",
+      "item": [
+        {
+          "name": "GET /api/products — Public ✅",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Returns array', () => pm.expect(pm.response.json()).to.be.an('array'));",
+                  "if (pm.response.json().length > 0) {",
+                  "  pm.collectionVariables.set('productId', pm.response.json()[0].id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/products", "host": ["{{baseUrl}}"], "path": ["api","products"] }
+          }
+        },
+        {
+          "name": "GET /api/products/search — Public ✅",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Returns array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/products/search?name=laptop",
+              "host": ["{{baseUrl}}"],
+              "path": ["api","products","search"],
+              "query": [{ "key": "name", "value": "laptop" }]
+            }
+          }
+        },
+        {
+          "name": "GET /api/products/health — Public ✅",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Status UP', () => pm.expect(pm.response.json().status).to.eql('UP'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/products/health", "host": ["{{baseUrl}}"], "path": ["api","products","health"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Products — Admin CRUD",
+      "item": [
+        {
+          "name": "POST /api/products — Admin ✅",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "pm.test('Product created', () => {",
+                  "  const p = pm.response.json();",
+                  "  pm.expect(p.name).to.eql('Gaming Laptop');",
+                  "  pm.expect(p.id).to.be.a('number');",
+                  "  pm.collectionVariables.set('productId', p.id);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "Content-Type",  "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Gaming Laptop\",\n  \"description\": \"High performance gaming laptop\",\n  \"price\": 85000.00,\n  \"stock\": 10,\n  \"category\": \"Electronics\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/products", "host": ["{{baseUrl}}"], "path": ["api","products"] }
+          }
+        },
+        {
+          "name": "POST /api/products — User Token ❌ (expect 403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 403 for USER role', () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{userToken}}" },
+              { "key": "Content-Type",  "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Hack Product\",\n  \"description\": \"Should be blocked\",\n  \"price\": 1.00,\n  \"stock\": 1,\n  \"category\": \"Test\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/products", "host": ["{{baseUrl}}"], "path": ["api","products"] }
+          }
+        },
+        {
+          "name": "POST /api/products — No Token ❌ (expect 401)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 401 for no token', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Unauthorized Product\",\n  \"price\": 99.00\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/products", "host": ["{{baseUrl}}"], "path": ["api","products"] }
+          }
+        },
+        {
+          "name": "PUT /api/products/:id — Admin ✅",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Product updated', () => pm.expect(pm.response.json().name).to.eql('Gaming Laptop Pro'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "Content-Type",  "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Gaming Laptop Pro\",\n  \"description\": \"Updated high performance gaming laptop\",\n  \"price\": 95000.00,\n  \"stock\": 8,\n  \"category\": \"Electronics\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/products/{{productId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api","products","{{productId}}"]
+            }
+          }
+        },
+        {
+          "name": "PUT /api/products/:id — User Token ❌ (expect 403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 403 for USER role', () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{userToken}}" },
+              { "key": "Content-Type",  "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Tampered\",\n  \"price\": 1.00\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/products/{{productId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api","products","{{productId}}"]
+            }
+          }
+        },
+        {
+          "name": "DELETE /api/products/:id — Admin ✅",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Delete message', () => pm.expect(pm.response.json().message).to.eql('Product deleted'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/{{productId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api","products","{{productId}}"]
+            }
+          }
+        },
+        {
+          "name": "DELETE /api/products/:id — User Token ❌ (expect 403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 403 for USER role', () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{userToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api","products","1"]
+            }
+          }
+        },
+        {
+          "name": "DELETE /api/products/:id — No Token ❌ (expect 401)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 401 for no token', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api","products","1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Token Edge Cases",
+      "item": [
+        {
+          "name": "Invalid JWT Token ❌ (expect 401)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 401 for invalid token', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer this.is.not.a.valid.jwt.token" }],
+            "url": { "raw": "{{baseUrl}}/api/users/all", "host": ["{{baseUrl}}"], "path": ["api","users","all"] }
+          }
+        },
+        {
+          "name": "Malformed Auth Header ❌ (expect 401)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 401 for malformed header', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Token abc123" }],
+            "url": { "raw": "{{baseUrl}}/api/users/all", "host": ["{{baseUrl}}"], "path": ["api","users","all"] }
+          }
+        },
+        {
+          "name": "Admin Token on User Profile ✅",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 — admin can access profile', () => pm.response.to.have.status(200));",
+                  "pm.test('Admin profile returned', () => pm.expect(pm.response.json().role).to.eql('ADMIN'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/users/profile", "host": ["{{baseUrl}}"], "path": ["api","users","profile"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Health Checks",
+      "item": [
+        {
+          "name": "User Service Health ✅",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Status UP', () => pm.expect(pm.response.json().status).to.eql('UP'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/users/health", "host": ["{{baseUrl}}"], "path": ["api","users","health"] }
+          }
+        },
+        {
+          "name": "Product Service Health ✅",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Status UP', () => pm.expect(pm.response.json().status).to.eql('UP'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/products/health", "host": ["{{baseUrl}}"], "path": ["api","products","health"] }
+          }
+        }
+      ]
+    }
+  ]
+}

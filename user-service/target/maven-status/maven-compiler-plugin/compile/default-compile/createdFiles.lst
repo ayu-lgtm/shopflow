@@ -1,0 +1,15 @@
+com/shopflow/user/dto/UserDto$RegisterRequest.class
+com/shopflow/user/config/JwtUtil.class
+com/shopflow/user/dto/UserDto$AuthResponse.class
+com/shopflow/user/dto/UserDto$LoginRequest.class
+com/shopflow/user/dto/UserDto.class
+com/shopflow/user/model/User$UserBuilder.class
+com/shopflow/user/controller/UserController.class
+com/shopflow/user/UserServiceApplication.class
+com/shopflow/user/dto/UserDto$UserResponse.class
+com/shopflow/user/config/KafkaEventPublisher.class
+com/shopflow/user/model/User$Role.class
+com/shopflow/user/model/User.class
+com/shopflow/user/repository/UserRepository.class
+com/shopflow/user/service/UserService.class
+com/shopflow/user/config/SecurityConfig.class

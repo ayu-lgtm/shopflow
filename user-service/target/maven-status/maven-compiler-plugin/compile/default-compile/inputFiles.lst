@@ -1,0 +1,9 @@
+/Users/ayushrastogi/Downloads/shopflow_fixed/user-service/src/main/java/com/shopflow/user/UserServiceApplication.java
+/Users/ayushrastogi/Downloads/shopflow_fixed/user-service/src/main/java/com/shopflow/user/controller/UserController.java
+/Users/ayushrastogi/Downloads/shopflow_fixed/user-service/src/main/java/com/shopflow/user/repository/UserRepository.java
+/Users/ayushrastogi/Downloads/shopflow_fixed/user-service/src/main/java/com/shopflow/user/config/JwtUtil.java
+/Users/ayushrastogi/Downloads/shopflow_fixed/user-service/src/main/java/com/shopflow/user/dto/UserDto.java
+/Users/ayushrastogi/Downloads/shopflow_fixed/user-service/src/main/java/com/shopflow/user/config/SecurityConfig.java
+/Users/ayushrastogi/Downloads/shopflow_fixed/user-service/src/main/java/com/shopflow/user/service/UserService.java
+/Users/ayushrastogi/Downloads/shopflow_fixed/user-service/src/main/java/com/shopflow/user/model/User.java
+/Users/ayushrastogi/Downloads/shopflow_fixed/user-service/src/main/java/com/shopflow/user/config/KafkaEventPublisher.java
